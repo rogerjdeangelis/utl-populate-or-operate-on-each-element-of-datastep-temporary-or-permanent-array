@@ -13,7 +13,49 @@ Populate or operate on each element of datastep temporary or permanent array
                                                                                                                           
   macros                                                                                                                  
   https://tinyurl.com/y9nfugth                                                                                            
-  https://github.com/rogerjdeangelis/utl-macros-used-in-many-of-rogerjdeangelis-repositories                              
+  https://github.com/rogerjdeangelis/utl-macros-used-in-many-of-rogerjdeangelis-repositories 
+  
+  Recent Sage advise from Paul Dorfman (applies to methods below)
+  
+  1. The FCMP method calling FILLMATRIX is limited to the arrays        
+satisfying all of the following conditions:                           
+                                                                      
+- Temp.                                                               
+- Numeric.                                                            
+- Starting at index 1.                                                
+                                                                      
+2. The APP method is good:                                            
+                                                                      
+- For any temp array. I haven't found their addresses'                
+contiguity to break for a temp array of any size.                     
+- Any non-temp array, as long as it's the first thing                 
+the compiler sees, as this guarantees its addresses' contiguity.      
+                                                                      
+One possible exception - discovered by Matt Kastin - is a             
+non-temp character array so huge in size that the contiguity          
+may get eventually broken somewhere down the line.                    
+Methinks it doesn't matter in practice since I don't                  
+see how a non-temp array with millions of variables                   
+can be of any practical utility. And at any rate,                     
+I can't find any breaks even with 10 million items (takes a           
+bout 2 minutes to compile/run):                                       
+                                                                      
+data _null_ ;                                                         
+  array a [10000000] $ 7 ;                                            
+  contig = 1 ;                                                        
+  do i = 2 to dim (a) ;                                               
+    ap = addrlong (a[i-1]) ;                                          
+    ac = addrlong (a[i]) ;                                            
+    if ac = ptrlongadd (ap, vlength (a1)) then continue ;             
+    contig = 0 ;                                                      
+    leave ;                                                           
+  end ;                                                               
+  put contig= ;                                                       
+run ;                                                                 
+                                                                      
+Best regards                                                          
+                                                                      
+
                                                                                                                           
                                                                                                                           
   Temporary and Permanent Datatep arrays of any size                                                                      
@@ -24,7 +66,7 @@ Populate or operate on each element of datastep temporary or permanent array
               mat[i]=0;                                                                                                   
            end;                                                                                                           
                                                                                                                           
-  Large Temporary Datastep Arrays                                                                                         
+  Large Temporary Datastep Arrays  (temp arrays, numeric, starting index = 1 (Paul see above)                                                                                       
                                                                                                                           
        2.  Very fast FCMP solution: Paul Dorfman sashole@bellsouth.net                                                    
                                                                                                                           
