@@ -3,7 +3,7 @@
                                                                                                                        
       Problem                                                                                                          
           Given an array with all elements=1.                                                                          
-          Zero out the arra. Set all elements to zero                                                                  
+          Zero out the arry. Set all elements to zero                                                                  
                                                                                                                        
       Six Solutions                                                                                                    
                                                                                                                        
