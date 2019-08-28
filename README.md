@@ -23,7 +23,12 @@
                                                                                                                        
          f. Pokelong                                                                                                   
             Paul Dorfman                                                                                               
-            sashole@bellsouth.net                                                                                      
+            sashole@bellsouth.net  
+            
+         g. Related  problem (change missings to zero)                                                                                       
+            Paul Dorfman                                                                                                                     
+            sashole@bellsouth.net   
+
                                                                                                                        
                                                                                                                        
       github                                                                                                           
@@ -302,6 +307,50 @@
          '));                                                                                                          
       &lst                                                                                                             
                                                                                                                        
-    %mend utl_aryFun;                                                                                                  
+    %mend utl_aryFun;    
+    
+    
+    
+    *                   _       _           _                                                                                      
+      __ _     _ __ ___| | __ _| |_ ___  __| |                                                                                     
+     / _` |   | '__/ _ \ |/ _` | __/ _ \/ _` |                                                                                     
+    | (_| |_  | | |  __/ | (_| | ||  __/ (_| |                                                                                     
+     \__, (_) |_|  \___|_|\__,_|\__\___|\__,_|                                                                                     
+     |___/                                                                                                                         
+    ;                                                                                                                              
+                                                                                                                                   
+                                                                                                                                   
+    Another way many on this list know all too well is:                                                                            
+                                                                                                                                   
+    data have ;                                                                                                                    
+      call streaminit (7) ;                                                                                                        
+      array val [11] _temporary_ (. 0 1 2 3 4 5 6 7 8 9) ;                                                                         
+      do ID = 1 to 10 ;                                                                                                            
+        array vv V1-V100 ;                                                                                                         
+        do over vv ;                                                                                                               
+          vv = val [rand ("integer", 10)] ;                                                                                        
+        end ;                                                                                                                      
+        output ;                                                                                                                   
+      end ;                                                                                                                        
+    run ;                                                                                                                          
+                                                                                                                                   
+    %let h = . ; * have value ;                                                                                                    
+    %let r = 0 ; * replace value ;                                                                                                 
+                                                                                                                                   
+    data want ;                                                                                                                    
+      set have ;                                                                                                                   
+      array v v: ;                                                                                                                 
+      call pokelong (tranwrd (peekclong (addrlong (v1), dim (v)), put (&h,rb8.), put (&r,rb8.)), addrlong (v1)) ;                  
+    run ;                                                                                                                          
+                                                                                                                                   
+    I am actually surprised that it performs pretty much on par with STDIZE.                                                       
+    The APP advantage is that H and W can be anything we want.                                                                     
+    The disadvantage is that it's limited to 4095 V-variables.                                                                     
+                                                                                                                                   
+    Kind regards                                                                                                                   
+    Paul Dorfman                                                                                                                   
+                                                                                                                                   
+                                                                                                                                   
+
                                                                                                                        
                                                                                                                        
